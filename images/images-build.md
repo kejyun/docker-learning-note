@@ -92,7 +92,7 @@ $ sudo docker run -t -i kejyun/ubuntu1804:0.1 /bin/bash
 
 設定完後指定要執行的指令是哪些，在這裡指定安裝了一個 `wget` 的套件，所以預期建立完進入容器後，就可以使用 `wget` 指令
 
-```Dockerfile
+```shell
 # 註解，檔案名稱：Dockerfile
 FROM kejyun/ubuntu1804:0.1
 RUN apt-get update
@@ -101,6 +101,19 @@ RUN apt-get install wget
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 ```
 
+| 參數  | 說明  |
+|---|---|
+| FROM  |  用哪一個映像檔當做 base 去做之後的映像檔 |
+| RUN  |  建立映像檔會執行的指令 |
+
+> 一個映像檔，最多不能超過 127 個 RUN 指令
+
+> Increase maximum image depth to 127 from 42
+
+> reference: [moby/CHANGELOG.md at master · moby/moby](https://github.com/moby/moby/blob/master/CHANGELOG.md#072-2013-12-16)
+
+
+
 使用 Dockerfile 建立映像檔，指定 tag 為 `kejyun/ubuntu1804docker:0.1`，所以就會從 `kejyun/ubuntu1804:0.1` 映像檔執行 Dockerfile 的指令
 
 > 指令：docker build -t=
@@ -108,6 +121,7 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 
 ```shell
 $ docker build -t="kejyun/ubuntu1804docker:0.1" .
+
 Sending build context to Docker daemon  2.048kB
 Step 1/5 : FROM kejyun/ubuntu1804:0.1
  ---> 0f58b888565e
@@ -166,3 +180,77 @@ REPOSITORY                TAG                 IMAGE ID            CREATED       
 kejyun/ubuntu1804         0.1                 a54db3844855        About a minute ago   144MB
 kejyun/ubuntu1804docker   0.1                 a54db3844855        About a minute ago   144MB
 ```
+
+使用 `docker bulid` 指令，所有動作皆依照 `Dockerfile` 指令去執行，所以一定要有 `Dockerfile`，當所有指令執行完畢，會有一個最終映像檔的 IMAGE ID，中間所有在 `Dockerfile` 執行 `RUN` 指令產生的容器都會被刪掉。
+
+
+### Dockerfile RUN
+
+一個 `RUN` 指令指的是一層 containers 需要做的事，每一層的東西並不會在下一層被刪除，會一直跟隨著映像檔，所以在寫 `RUN` 指令時，確保每一層只填寫需要的指令。
+
+此時可以在 `RUN` 指令行尾加入 `\` 命令去做換行，使用 `&&` 符號將不同的指令連接再一起，使用縮排去做排版，並在首行使用 `#` 去寫註解，確保每一層只有執行真正需要的東西。
+
+```shell
+# Dockerfile
+FROM kejyun/ubuntu1804:0.1
+# 安裝 Python
+RUN buildPython='apt-get update \
+    && apt-get upgrade \
+    && apt-get install wget \
+    && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py' $buildPython
+```
+
+若沒有使用這樣的方式去建構 Docker 映像檔，很容易做出了很肥的映像檔
+
+
+## 複製檔案到映像檔
+
+要複製的檔案必須要放在 Dockerfile 的目錄下，用相對路徑去複製
+
+```shell
+# Dockerfile
+FROM kejyun/ubuntu1804:0.1
+# 複製檔案
+COPY ./package.json /home
+# 安裝 Python
+RUN buildPython='apt-get update \
+    && apt-get upgrade \
+    && apt-get install wget \
+    && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py' $buildPython /home/
+```
+
+## 複製目錄到映像檔
+
+整個目錄必須要在 `Dockerfile` 所在目錄
+
+```shell
+# Dockerfile
+FROM kejyun/ubuntu1804:0.1
+# 複製檔案
+COPY ./package.json /home
+# 複製目錄
+COPY ./web /home/web
+# 安裝 Python
+RUN buildPython='apt-get update \
+    && apt-get upgrade \
+    && apt-get install wget \
+    && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py' $buildPython /home/
+```
+
+若是複製整個目錄，但目錄中有些檔案不想要被複製，可以在 `Dockerfile` 目錄下，新增 `.dockerignore` 檔案，將不需要複製的檔案路徑寫在裡面，寫法與 `.gitignore` 一樣
+
+```shell
+# .dockerignore
+web/html/not-need-copy.html
+web/html/not-need-copy.png
+```
+
+## 參考資料
+* [docker build | Docker Documentation](https://docs.docker.com/engine/reference/commandline/build/)
+* [建立 · 《Docker —— 從入門到實踐­》正體中文版](https://philipzheng.gitbooks.io/docker_practice/content/image/create.html)
+* [moby/CHANGELOG.md at master · moby/moby](https://github.com/moby/moby/blob/master/CHANGELOG.md#072-2013-12-16)
+* [INFO 0011 Cannot create container with more than 127 parents · Issue #12624 · moby/moby](https://github.com/moby/moby/issues/12624)
+* [CMD 容器启动命令 · Docker —— 从入门到实践](https://yeasy.gitbooks.io/docker_practice/image/dockerfile/cmd.html)
+* [利用 commit 理解镜像构成 · Docker —— 从入门到实践](https://yeasy.gitbooks.io/docker_practice/image/commit.html)
+* [使用 Dockerfile 定制镜像 · Docker —— 从入门到实践](https://yeasy.gitbooks.io/docker_practice/image/build.html)
+* [Best practices for writing Dockerfiles | Docker Documentation](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)

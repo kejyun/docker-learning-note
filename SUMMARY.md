@@ -7,4 +7,5 @@
     * [下載映像檔](images/images-pull.md)
     * [列出映像檔](images/images-list.md)
     * [建立映像檔](images/images-build.md)
+    * [刪除映像檔](images/images-remove.md)
 * [參考資料](reference/reference-README.md)
