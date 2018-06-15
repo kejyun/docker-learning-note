@@ -38,9 +38,9 @@ root@1436aace3d48:/# apt-get install curl
 root@1436aace3d48:/# exit
 ```
 
-輸入 commit 訊息，在後面加入剛剛啟動的 `CONTAINER ID`，此容器編號為 `root@1436aace3d48:/#` root@ 後方的那一串編號，並指定遠端的倉庫是那一個，在這裡為 `kejyun/ubuntu1804`，在倉庫後可以加入版本號 `0.1`，指令如下：
+輸入 commit 訊息，在後面加入剛剛啟動的 `CONTAINER ID`，此容器編號為 `root@1436aace3d48:/#` root@ 後方的那一串編號，並指定遠端的資源庫是那一個，在這裡為 `kejyun/ubuntu1804`，在資源庫後可以加入版本號 `0.1`，指令如下：
 
-> docker commit -m 'Commit 的訊息' <CONTAINER ID> <倉庫:版本號>
+> docker commit -m 'Commit 的訊息' <CONTAINER ID> <資源庫:版本號>
 
 ```shell
 $ docker commit -m 'Add curl' 1436aace3d48 kejyun/ubuntu1804:0.1
@@ -52,7 +52,7 @@ REPOSITORY           TAG                 IMAGE ID            CREATED            
 kejyun/ubuntu1804    0.1                 a9b3724e2ee3        Less than a second ago   137MB
 ```
 
-**不指定倉庫及版本**
+**不指定資源庫及版本**
 
 
 ```shell
@@ -65,7 +65,7 @@ REPOSITORY           TAG                 IMAGE ID            CREATED            
 <none>               <none>              3da67fb2dba4        2 seconds ago       137MB
 ```
 
-**指定倉庫不指定版本**
+**指定資源庫不指定版本**
 
 ```shell
 $ docker commit -m 'Add curl'  1436aace3d48 kejyun/ubuntu1804
@@ -117,7 +117,7 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 使用 Dockerfile 建立映像檔，指定 tag 為 `kejyun/ubuntu1804docker:0.1`，所以就會從 `kejyun/ubuntu1804:0.1` 映像檔執行 Dockerfile 的指令
 
 > 指令：docker build -t=
-> docker build -t "<倉庫:版本號>" <Dockerfile 資料夾路徑>
+> docker build -t "<資源庫:版本號>" <Dockerfile 資料夾路徑>
 
 ```shell
 $ docker build -t="kejyun/ubuntu1804docker:0.1" .

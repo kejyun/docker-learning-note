@@ -3,7 +3,9 @@
 
 ## 終止容器
 
-> docker container stop <CONTAINER ID / CONTAINER NAMES>
+```shell
+docker container stop <CONTAINER ID / CONTAINER NAMES>
+```
 
 指令後方可以輸入 `CONTAINER ID` 或 `CONTAINER NAMES` 去終止容器
 
@@ -25,7 +27,9 @@ $ docker container stop a7d3fc447e45
 ## 列出所有 container
 
 
-> docker container ls -a
+```shell
+docker container ls -a
+```
 
 
 ```shell
@@ -41,7 +45,9 @@ aa5cca969bed        a54db3844855                  "/bin/sh -c 'buildPy…"   Abo
 
 ## 啟動容器
 
-> docker container start <CONTAINER ID / CONTAINER NAMES>
+```shell
+docker container start <CONTAINER ID / CONTAINER NAMES>
+```
 
 指令後方可以輸入 `CONTAINER ID` 或 `CONTAINER NAMES` 去啟動容器
 
@@ -52,7 +58,9 @@ $ docker container start a7d3fc447e45
 ## 重新啟動容器
 
 
-> docker container restart <CONTAINER ID / CONTAINER NAMES>
+```shell
+docker container restart <CONTAINER ID / CONTAINER NAMES>
+```
 
 指令後方可以輸入 `CONTAINER ID` 或 `CONTAINER NAMES` 去重新啟動容器
 

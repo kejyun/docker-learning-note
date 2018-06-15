@@ -111,9 +111,13 @@ root@1436aace3d48:/#
 
 **語法**
 
-> docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+```shell
+docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+```
 
-> docker run -t -i ubuntu:18.04 /bin/bash
+```shell
+$ docker run -t -i ubuntu:18.04 /bin/bash
+```
 
 | 參數  | 說明  |
 |---|---|
@@ -136,11 +140,15 @@ root@1436aace3d48:/#
 
 **列出目前啟動的映像檔 container**
 
-> docker ps
+```shell
+docker ps
+```
 
 **列出所有映像檔 container**
 
-> docker ps -a
+```shell
+docker ps -a
+```
 
 ```shell
 $ docker ps -a

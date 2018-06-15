@@ -9,7 +9,9 @@ $ docker run -it kejyun/ubuntu1804docker:0.2 /bin/bash
 ## 顯示容器 Log
 
 
-> docker container logs <CONTAINER ID / CONTAINER NAMES>
+```shell
+$ docker container logs <CONTAINER ID / CONTAINER NAMES>
+```
 
 指令後方可以輸入 `CONTAINER ID` 或 `CONTAINER NAMES` 去取得容器 Log
 
